@@ -1,31 +1,41 @@
 <template>
-    <div>
-        <div class="grid grid-cols-4 gap-5">
-            <my-card 
-            title="Мужские крассовки Nike Blazer Mid Suede" 
-            :price="5000" 
-            image-url="/sneakers/sneakers-1.jpg" 
-            :is-added="true"
-            :is-favorite="true"
-            :onClickAdd="onClickAdd"
-            ></my-card>
-        </div>
+  <div>
+    <div class="grid grid-cols-4 gap-5">
+      <my-card
+        v-for="item in items"
+        :title="item.title"
+        :price="item.price"
+        :image-url="item.imageUrl"
+        :is-added="true"
+        :is-favorite="true"
+        @clickAdd="onClickAdd(item)"
+        @clickFavorite="onClickFavorite(item)"
+        :key="item.id"
+      ></my-card>
     </div>
+  </div>
 </template>
 
 <script>
-import MyCard from './MyCard.vue';
+import MyCard from "./MyCard.vue";
 
-    export default {
+export default {
   components: { MyCard },
-    methods: {
-        onClickAdd() {
-            alert(111)
-        }
-    },   
-    }
+  props: {
+    items: {
+      type: Array,
+      required: true,
+    },
+  },
+  methods: {
+    onClickAdd() {
+      alert("Added to cart!");
+    },
+    onClickFavorite() {
+      alert("Toggled favorite!");
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
