@@ -3,7 +3,7 @@
         <div class="grid grid-cols-4 gap-5">
             <my-card v-for="item in items" :title="item.title" :id="item.id" :price="item.price"
                 :image-url="item.imageUrl" :isAdded="item.isAdded" :isFavorite="item.isFavorite"
-                @clickAdd="onClickAdd(item)" @clickFavorite="onClickFavorite(item)" :key="item.id"></my-card>
+                @clickAdd="addToCart(item)" @clickFavorite="onClickFavorite(item)" :key="item.id"></my-card>
         </div>
     </div>
 </template>
@@ -15,7 +15,7 @@ import MyCard from "./MyCard.vue";
 
 export default {
     components: { MyCard },
-    inject: ['AddToFavorite'],
+    inject: ['AddToFavorite', 'addToCart'],
     props: {
         items: {
             type: Array,
@@ -24,7 +24,7 @@ export default {
     },
     methods: {
         onClickFavorite(item) {
-            this.AddToFavorite(item); 
+            this.AddToFavorite(item);
         },
     },
 };
