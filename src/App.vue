@@ -94,13 +94,24 @@ export default {
         },
         async AddToFavorite(item) {
             try {
-                const { data } = await axios.post(`https://e497329b2c6762bd.mokky.dev/favorites`, {
-                    parentId: item.id,
-                });
-                item.isFavorite = !item.isFavorite;
-                item.favoriteId = data.id; 
+
+                const favorite = this.favorites.find(fav => fav.parentId === item.id);
+
+                if (favorite) {
+                    item.isFavorite = false;
+                    await axios.delete(`https://e497329b2c6762bd.mokky.dev/favorites/${favorite.id}`);
+                    this.favorites = this.favorites.filter(fav => fav.parentId !== item.id);
+                } else {
+
+                    item.isFavorite = true;
+                    const { data } = await axios.post(`https://e497329b2c6762bd.mokky.dev/favorites`, {
+                        parentId: item.id,
+                    });
+                    item.favoriteId = data.id;
+                    this.favorites.push({ parentId: item.id, id: data.id });
+                }
             } catch (err) {
-                console.error('Не вдалося додати до улюблених', err);
+                console.error('Не вдалося змінити статус улюбленого товару', err);
             }
         },
         onChangeSelect(event) {
