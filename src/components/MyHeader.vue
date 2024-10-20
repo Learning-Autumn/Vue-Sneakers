@@ -12,6 +12,7 @@
       <ul class="flex items-center gap-10">
         <li
           class="flex items-center cursor-pointer gap-10 text-gray-500 hover:text-black"
+          @click="openDrawer"
         >
           <img src="/cart.svg" alt="card" />
           <b>1205 грн.</b>
@@ -34,7 +35,14 @@
 </template>
 
 <script>
-export default {};
+export default {
+    props: {
+        openDrawer: {
+            type: Function,
+            required: true
+        },
+    }
+};
 </script>
 
 <style lang="scss" scoped></style>

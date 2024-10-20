@@ -1,7 +1,9 @@
 <template>
     <div>
+        <my-drawer v-if="drawerOpen" :closeDrawer="closeDrawer"></my-drawer>
+
         <div class="bg-white w-4/5 mx-auto rounded-xl shadow-xl mt-14">
-            <my-header></my-header>
+            <my-header :openDrawer="openDrawer"></my-header>
 
             <div class="p-10">
                 <div class="flex justify-between items-center">
@@ -33,19 +35,22 @@
 import axios from 'axios';
 import MyCardList from "./components/MyCardList.vue";
 import MyHeader from "./components/MyHeader.vue";
+import MyDrawer from './components/MyDrawer.vue';
 
 
 export default {
-    components: { MyHeader, MyCardList },
+    components: { MyHeader, MyCardList, MyDrawer },
     provide() {
         return {
-            AddToFavorite: this.AddToFavorite
+            AddToFavorite: this.AddToFavorite,
+            closeDrawer: this.closeDrawer
         };
     },
     data() {
         return {
             items: [],
             favorites: [],
+            drawerOpen: false,
             filters: {
                 sortBy: 'title',
                 searchQuery: ''
@@ -113,6 +118,12 @@ export default {
             } catch (err) {
                 console.error('Не вдалося змінити статус улюбленого товару', err);
             }
+        },
+        async closeDrawer() {
+            this.drawerOpen = false
+        },
+        async openDrawer() {
+            this.drawerOpen = true
         },
         onChangeSelect(event) {
             this.filters.sortBy = event.target.value;
