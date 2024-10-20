@@ -43,6 +43,7 @@ export default {
             AddToFavorite: this.AddToFavorite,
             addToCart: this.addToCart,
             closeDrawer: this.closeDrawer,
+            cart: this.cart,
         };
     },
     data() {
