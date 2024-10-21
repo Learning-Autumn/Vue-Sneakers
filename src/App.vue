@@ -1,9 +1,10 @@
 <template>
     <div>
-        <my-drawer v-if="drawerOpen" :closeDrawer="closeDrawer"></my-drawer>
+        <my-drawer v-if="drawerOpen" :closeDrawer="closeDrawer" :total-price="totalPrice" :vatPrice="vatPrice"
+            @create-order="createOrder"></my-drawer>
 
         <div class="bg-white w-4/5 mx-auto rounded-xl shadow-xl mt-14">
-            <my-header :openDrawer="openDrawer"></my-header>
+            <my-header :total-price="totalPrice" :openDrawer="openDrawer"></my-header>
 
             <div class="p-10">
                 <div class="flex justify-between items-center">
@@ -58,6 +59,14 @@ export default {
                 searchQuery: "",
             },
         };
+    },
+    computed: {
+        totalPrice() {
+            return this.cart.reduce((acc, item) => acc + item.price, 0);
+        },
+        vatPrice() {
+            return this.totalPrice * 0.05;
+        },
     },
     methods: {
         async fetchItems() {
@@ -127,6 +136,7 @@ export default {
             }
         },
         async addToCart(item) {
+
             const cartItem = this.cart.find((cartItem) => cartItem.id === item.id);
 
             if (cartItem) {
@@ -154,6 +164,30 @@ export default {
         },
         async openDrawer() {
             this.drawerOpen = true;
+        },
+        async createOrder() {
+            try {
+                this.items.forEach(item => {
+                    item.isAdded = false;
+                });
+                this.cart.forEach(item_cart => {
+                    item_cart.isAdded = false;
+                });
+                console.log(this.cart);
+
+
+                const { data } = await axios.post('https://e497329b2c6762bd.mokky.dev/orders', {
+                    items: this.cart,
+                    totalPrice: this.totalPrice,
+                });
+
+                this.cart = [];
+                console.log(this.cart);
+
+                return data;
+            } catch (err) {
+                console.log(err);
+            }
         },
         onChangeSelect(event) {
             this.filters.sortBy = event.target.value;

@@ -15,7 +15,7 @@
           @click="openDrawer"
         >
           <img src="/cart.svg" alt="card" />
-          <b>1205 грн.</b>
+          <b>{{ totalPrice }} грн.</b>
         </li>
         <li
           class="flex items-center cursor-pointer gap-10 text-gray-500 hover:text-black"
@@ -39,8 +39,9 @@ export default {
     props: {
         openDrawer: {
             type: Function,
-            required: true
+            required: true,
         },
+        totalPrice: Number,
     }
 };
 </script>
