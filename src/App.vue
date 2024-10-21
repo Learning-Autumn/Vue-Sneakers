@@ -42,6 +42,7 @@ export default {
         return {
             AddToFavorite: this.AddToFavorite,
             addToCart: this.addToCart,
+            removeFromCart: this.removeFromCart,
             closeDrawer: this.closeDrawer,
             cart: this.cart,
         };
@@ -127,14 +128,25 @@ export default {
         },
         async addToCart(item) {
             const cartItem = this.cart.find((cartItem) => cartItem.id === item.id);
-            console.log(this.cart);
-            
+
             if (cartItem) {
                 item.isAdded = false;
                 this.cart = this.cart.filter((cartItem) => cartItem.id !== item.id);
             } else {
                 item.isAdded = true;
-                this.cart.push(item);
+                this.cart.push({ ...item });
+            }
+            console.log(this.cart);
+        },
+        async removeFromCart(itemToRemove) {
+            const index = this.cart.findIndex(item => item.id === itemToRemove.id);
+            if (index !== -1) {
+                this.cart.splice(index, 1);
+
+                const item = this.items.find(item => item.id === itemToRemove.id);
+                if (item) {
+                    item.isAdded = false;
+                }
             }
         },
         async closeDrawer() {

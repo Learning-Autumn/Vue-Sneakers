@@ -5,7 +5,8 @@
             <p>{{ title }}</p>
             <div class="flex justify-between mt-2">
                 <b class="flex-1">{{ price }} грн.</b>
-                <img class="opacity-30 hover:opacity-100 cursor-pointer transition" src="/close.svg" alt="" />
+                <img @click="removeFromCart({ id, title, imageUrl, price })"
+                    class="opacity-30 hover:opacity-100 cursor-pointer transition" src="/close.svg" alt="" />
             </div>
         </div>
     </div>
@@ -14,11 +15,13 @@
 <script>
 export default {
     props: {
+        item: Object,
         title: String,
         id: Number,
         imageUrl: String,
         price: Number,
     },
+    inject: ['removeFromCart'],
 };
 </script>
 
