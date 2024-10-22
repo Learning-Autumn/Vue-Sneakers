@@ -136,17 +136,26 @@ export default {
             }
         },
         async addToCart(item) {
-
+            // Пошук товару в корзині
             const cartItem = this.cart.find((cartItem) => cartItem.id === item.id);
 
             if (cartItem) {
+                // Якщо товар вже в корзині, видаляємо його і ставимо isAdded = false
                 item.isAdded = false;
                 this.cart = this.cart.filter((cartItem) => cartItem.id !== item.id);
             } else {
+                // Якщо товар ще не в корзині, додаємо його і ставимо isAdded = true
                 item.isAdded = true;
-                this.cart.push({ ...item });
+                this.cart.push(item); // Використовуємо посилання на оригінальний об'єкт
             }
-            console.log(this.cart);
+
+            // Оновлюємо стан оригінального списку товарів, якщо він зберігає старі значення
+            const originalItem = this.items.find((original) => original.id === item.id);
+            if (originalItem) {
+                originalItem.isAdded = item.isAdded;
+            }
+
+            
         },
         async removeFromCart(itemToRemove) {
             const index = this.cart.findIndex(item => item.id === itemToRemove.id);
@@ -173,7 +182,7 @@ export default {
                 this.cart.forEach(item_cart => {
                     item_cart.isAdded = false;
                 });
-                console.log(this.cart);
+                
 
 
                 const { data } = await axios.post('https://e497329b2c6762bd.mokky.dev/orders', {
@@ -182,7 +191,7 @@ export default {
                 });
 
                 this.cart = [];
-                console.log(this.cart);
+                
 
                 return data;
             } catch (err) {

@@ -9,7 +9,7 @@
         class="absolute top-8 left-8"
         @click="$emit('clickFavorite')"
       />
-      <img :src="imageUrl" alt="Sneaker" />
+      <img height="220px" :src="imageUrl" alt="Sneaker" />
 
       <p class="mt-2">{{ title }}</p>
 

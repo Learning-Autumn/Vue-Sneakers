@@ -20,6 +20,7 @@ export default {
         id: Number,
         imageUrl: String,
         price: Number,
+        isAdded: Boolean,
     },
     inject: ['removeFromCart'],
 };
