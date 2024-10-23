@@ -1,7 +1,11 @@
 <template>
     <div>
-        <my-drawer v-if="drawerOpen" :closeDrawer="closeDrawer" :total-price="totalPrice" :vatPrice="vatPrice"
-            @create-order="createOrder"></my-drawer>
+        <my-drawer v-if="drawerOpen" 
+        :closeDrawer="closeDrawer" 
+        :total-price="totalPrice" 
+        :vatPrice="vatPrice"
+        @create-order="createOrder"
+        :isCreatingOrder="isCreatingOrder"></my-drawer>
 
         <div class="bg-white w-4/5 mx-auto rounded-xl shadow-xl mt-14">
             <my-header :total-price="totalPrice" :openDrawer="openDrawer"></my-header>
@@ -54,6 +58,7 @@ export default {
             favorites: [],
             cart: [],
             drawerOpen: false,
+            isCreatingOrder: false,
             filters: {
                 sortBy: "title",
                 searchQuery: "",
@@ -136,20 +141,15 @@ export default {
             }
         },
         async addToCart(item) {
-            // Пошук товару в корзині
             const cartItem = this.cart.find((cartItem) => cartItem.id === item.id);
 
             if (cartItem) {
-                // Якщо товар вже в корзині, видаляємо його і ставимо isAdded = false
                 item.isAdded = false;
                 this.cart = this.cart.filter((cartItem) => cartItem.id !== item.id);
             } else {
-                // Якщо товар ще не в корзині, додаємо його і ставимо isAdded = true
                 item.isAdded = true;
-                this.cart.push(item); // Використовуємо посилання на оригінальний об'єкт
+                this.cart.push(item); 
             }
-
-            // Оновлюємо стан оригінального списку товарів, якщо він зберігає старі значення
             const originalItem = this.items.find((original) => original.id === item.id);
             if (originalItem) {
                 originalItem.isAdded = item.isAdded;
@@ -176,6 +176,7 @@ export default {
         },
         async createOrder() {
             try {
+                this.isCreatingOrder = true
                 this.items.forEach(item => {
                     item.isAdded = false;
                 });
@@ -196,6 +197,8 @@ export default {
                 return data;
             } catch (err) {
                 console.log(err);
+            } finally {
+              this.isCreatingOrder = false
             }
         },
         onChangeSelect(event) {
