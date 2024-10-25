@@ -1,5 +1,5 @@
 <template>
-  <div class="p-10">
+  <div>
     <div class="flex justify-between items-center">
       <h2 class="text-3xl font-bold mb-8">Всі кросівки</h2>
       <div class="flex gap-4">
@@ -54,7 +54,6 @@ export default {
   },
   methods: {
     handleInputChange(event) {
-      // Викликаємо переданий метод пошуку з батьківського компонента
       this.onChangeInput(event.target.value);
     },
   },

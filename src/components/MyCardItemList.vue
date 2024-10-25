@@ -12,7 +12,7 @@ export default {
     components: { MyCardItem },
     computed: {
         filteredCart() {
-            console.log(this.cart.filter(item => item.isAdded));
+            // console.log(this.cart.filter(item => item.isAdded));
             
             return this.cart.filter(item => item.isAdded);
         },

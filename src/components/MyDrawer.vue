@@ -7,6 +7,14 @@
     <div class="bg-white w-96 h-full fixed right-0 top-0 z-20 p-8">
       <my-drawer-head></my-drawer-head>
 
+      <div class="flex h-full items-center" v-if="!totalPrice && isCreatingOrder">
+        <my-info-block
+          :title="`Дякую за замовлення №${orderId} 💋`"
+          desc="Щоб повторно замовити додайте нові товари до корзини"
+          image-url="/order-success-icon.png"
+        ></my-info-block>
+      </div>
+
       <div class="flex h-full items-center" v-if="!totalPrice">
         <my-info-block
           title="Корзина порожня"
@@ -14,6 +22,7 @@
           image-url="/empy-basket.png"
         ></my-info-block>
       </div>
+
 
       <div v-else>
         <my-card-item-list v-if="totalPrice"></my-card-item-list>
@@ -62,6 +71,7 @@ export default {
     totalPrice: Number,
     vatPrice: Number,
     isCreatingOrder: Boolean,
+    orderId: Boolean,
   },
   methods: {
     handleCreateOrder() {

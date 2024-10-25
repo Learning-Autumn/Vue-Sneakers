@@ -5,6 +5,7 @@
       :closeDrawer="closeDrawer"
       :total-price="totalPrice"
       :vatPrice="vatPrice"
+      :orderId="orderId"
       @create-order="createOrder"
       :isCreatingOrder="isCreatingOrder"
     ></my-drawer>
@@ -12,11 +13,13 @@
     <div class="bg-white w-4/5 mx-auto rounded-xl shadow-xl mt-14">
       <my-header :total-price="totalPrice" :openDrawer="openDrawer"></my-header>
 
-      <router-view
-        :items="items"
-        :onChangeSelect="onChangeSelect"
-        :onChangeInput="onChangeInput"
-      ></router-view>
+      <div class="p-10">
+        <router-view
+          :items="items"
+          :onChangeSelect="onChangeSelect"
+          :onChangeInput="onChangeInput"
+        ></router-view>
+      </div>
     </div>
   </div>
 </template>
@@ -42,6 +45,7 @@ export default {
       items: [],
       favorites: [],
       cart: [],
+      orderId: 0,
       drawerOpen: false,
       isCreatingOrder: false,
       filters: {
@@ -116,6 +120,7 @@ export default {
             `https://e497329b2c6762bd.mokky.dev/favorites`,
             {
               parentId: item.id,
+              item
             }
           );
           item.favoriteId = data.id;
@@ -127,7 +132,7 @@ export default {
     },
     async addToCart(item) {
       const cartItem = this.cart.find((cartItem) => cartItem.id === item.id);
-
+      this.isCreatingOrder = false;
       if (cartItem) {
         item.isAdded = false;
         this.cart = this.cart.filter((cartItem) => cartItem.id !== item.id);
@@ -160,6 +165,8 @@ export default {
     async createOrder() {
       try {
         this.isCreatingOrder = true;
+        console.log(this.isCreatingOrder);
+        
         this.items.forEach((item) => {
           item.isAdded = false;
         });
@@ -173,12 +180,13 @@ export default {
         });
 
         this.cart = [];
+        this.orderId = data.id;
 
         return data;
       } catch (err) {
         console.log(err);
       } finally {
-        this.isCreatingOrder = false;
+        // this.isCreatingOrder = false;
       }
     },
     onChangeSelect(event) {
